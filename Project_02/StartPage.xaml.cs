@@ -54,7 +54,7 @@ namespace Project_02
             // Обработчик нажатия на кнопку
             arrowButton.Clicked += async (sender, args) =>
             {
-                await Shell.Current.GoToAsync("//NavigatePage");
+                await Shell.Current.GoToAsync($"//{nameof(NavigatePage)}");
             };
 
             // Создаем макет для размещения элементов
