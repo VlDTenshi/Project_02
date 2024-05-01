@@ -1,8 +1,7 @@
-﻿using Project_02.Services;
-using Project_02.Views;
-using System;
+﻿using MonkeyCache.FileStore;
+using Project_02.Assistants;
+using Xamarin.Essentials;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Project_02
 {
@@ -13,21 +12,35 @@ namespace Project_02
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
-            MainPage = new NavigationPage(new StartPage());
+            Barrel.ApplicationId = AppInfo.PackageName;
+
+            MainPage = new AppShell();
             
         }
 
         protected override void OnStart()
         {
+            OnResume();
         }
 
         protected override void OnSleep()
         {
+            Themes.SetTheme();
+            RequestedThemeChanged -= App_RequestedThemeChanged;
         }
 
         protected override void OnResume()
         {
+            Themes.SetTheme();
+            RequestedThemeChanged += App_RequestedThemeChanged;
+        }
+
+        private void App_RequestedThemeChanged(object sender, AppThemeChangedEventArgs e)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Themes.SetTheme();
+            });
         }
     }
 }

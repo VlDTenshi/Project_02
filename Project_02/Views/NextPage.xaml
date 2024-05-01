@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:Project_02.ViewModels"
+             x:Class="Project_02.Views.NextPage"
+             x:DataType="viewmodels:NextPageViewModel"
+             Padding="0,20,0,0">
+    <ContentPage.BindingContext>
+        <viewmodels:NextPageViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid RowDefinitions="*,Auto,Auto,*">
+
+            <Label
+        Grid.Row="1"
+        BackgroundColor="Orange"
+        HorizontalOptions="Center"
+        FontSize="Medium"
+        Text="Choose your way for continuing"/>
+
+            <Button 
+        Command="{Binding GoTo}"
+        Grid.Row="2" 
+        Text="Hospitals"/>
+
+            <Button 
+        Command="{Binding GoToo}"
+        Grid.Row="3" 
+        Text="Medicines"/>
+
+            <Button 
+        Command="{Binding GoTooo}"
+        Grid.Row="4" 
+        Text="Exercises"/>
+
+            <Button 
+        Command="{Binding GoToooo}"
+        Grid.Row="5" 
+        Text="Emergency Call"/>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

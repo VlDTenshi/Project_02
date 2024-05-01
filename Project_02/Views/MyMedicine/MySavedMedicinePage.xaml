@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:Project_02.ViewModels.MyMedicine"
+             x:Class="Project_02.Views.MyMedicine.MySavedMedicinePage"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" xmlns:model="clr-namespace:Project_02.Models"
+             x:Name="MyMedicinePage"
+             x:DataType="viewmodels:MyMedicineViewModel"
+             BackgroundColor="{AppThemeBinding
+                                Dark={StaticResource WindowBackgroundColorDark},
+                                Light={StaticResource WindowBackgroundColor}}">
+    
+    <ContentPage.BindingContext>
+        <viewmodels:MyMedicineViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddCommand}"/>
+    </ContentPage.ToolbarItems>
+
+    <ListView
+        IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+        ItemsSource="{Binding Medicine}"
+        RefreshCommand="{Binding RefreshCommand}"
+        SelectionMode="Single"
+        Style="{StaticResource MedicineListView}"
+        CachingStrategy="RecycleElement">
+        <ListView.Behaviors>
+            <xct:EventToCommandBehavior
+                EventName="ItemSelected"
+                Command="{Binding SelectedCommand}"
+                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+        </ListView.Behaviors>
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:Medicine">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem
+                            Command="{Binding Source={x:Reference MyMedicinePage}, Path=BindingContext.RemoveCommand}"
+                            CommandParameter="{Binding .}"
+                            IsDestructive="True"
+                            Text="Delete" />
+                    </ViewCell.ContextActions>
+                    <Grid Padding="10">
+                        <Frame Style="{StaticResource MedicineCard}">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="{Binding Image}" WidthRequest="66"/>
+                                <StackLayout VerticalOptions="Center">
+                                    <Label
+                                        Style="{StaticResource LabelLarge}"
+                                        Text="{Binding Name}"
+                                        VerticalOptions="Center"/>
+                                    <Label
+                                        Style="{StaticResource LabelLarge}"
+                                        Text="{Binding Type}"
+                                        VerticalOptions="Center"/>
+                                    <Label
+                                        Style="{StaticResource LabelSmall}"
+                                        Text="{Binding Id}"
+                                        VerticalOptions="Center"/>
+                                </StackLayout>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>

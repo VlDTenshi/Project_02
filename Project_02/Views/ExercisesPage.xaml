@@ -1,12 +1,66 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Project_02.Views.ExercisesPage">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:Project_02.ViewModels"
+             xmlns:model="clr-namespace:Project_02.Models" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             x:Class="Project_02.Views.ExercisesPage"
+             x:DataType="viewmodels:ExerciseViewModel">
+
+    <ContentPage.BindingContext>
+        <viewmodels:ExerciseViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Clicked="ToolbarItem_Clicked" Text="Logout" />
+    </ContentPage.ToolbarItems>
+
+    <ListView
+    CachingStrategy="RecycleElement"
+    GroupDisplayBinding="{Binding Key}"
+    IsGroupingEnabled="True"
+    IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+    ItemsSource="{Binding ExerciseGroups}"
+    RefreshCommand="{Binding RefreshCommand}"
+    SelectedItem="{Binding SelectedExercise, Mode=TwoWay}"
+    Style="{StaticResource ExerciseListView}"
+    ItemTemplate="{StaticResource ExerciseSelector}">
+        <ListView.Behaviors>
+            <xct:EventToCommandBehavior
+            Command="{Binding SelectedCommand}"
+            EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"
+            EventName="ItemSelected" />
+        </ListView.Behaviors>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="{x:Null}">
+                <ViewCell>
+                    <StackLayout Padding="20,0">
+                        <Label Style="{StaticResource LabelMedium}" Text="{Binding Key}" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        <ListView.Header>
+            <StackLayout Orientation="Horizontal">
+                <Label
+                Margin="20"
+                FontFamily="AC"
+                HorizontalOptions="Center"
+                Style="{StaticResource LabelLarge}"
+                Text="Exercises in the world">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
+        </ListView.Header>
+        <ListView.Footer>
+            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <Button
+                Command="{Binding LoadMoreCommand}"
+                Style="{StaticResource ButtonOutline}"
+                Text="Load More" />
+            </StackLayout>
+        </ListView.Footer>
+    </ListView>
 </ContentPage>
